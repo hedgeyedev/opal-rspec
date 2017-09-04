@@ -54,11 +54,6 @@ RSpec::Core::RakeTask.new :unit_specs do |t|
   t.pattern = 'spec/opal/rspec/**/*_spec.rb'
 end
 
-desc 'A more limited spec suite to test pattern usage'
-Opal::RSpec::RakeTask.new(:other_specs) do |_, task|
-  task.pattern = 'spec-opal/other/dummy_spec.rb'
-end
-
 Opal::RSpec::RakeTask.new(:color_on_by_default) do |_, task|
   task.pattern = 'spec-opal/other/color_on_by_default_spec.rb'
 end
@@ -77,18 +72,9 @@ task :verify_rspec_specs => [
   :verify_rspec_mocks_specs,
 ]
 
-desc 'Verifies other_spec_dir task ran correctly'
-task :verify_other_specs do
-  test_output = `rake other_specs`
-  unless /1 example, 0 failures/.match(test_output)
-    raise "Expected 1 passing example, but got output '#{test_output}'"
-  end
-  puts 'Test successful'
-end
-
 desc 'Will run a spec suite (rake spec:opal) and check for expected combination of failures and successes'
 task :verify_opal_specs do
-  system 'rspec spec/integration/verify_opal_specs_spec.rb'
+  sh 'rspec spec/integration/verify_opal_specs_spec.rb'
 end
 
 desc "Build build/opal-rspec.js"
