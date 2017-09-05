@@ -59,9 +59,9 @@ Opal::RSpec::RakeTask.new(:color_on_by_default) do |_, task|
 end
 
 Opal::RSpec::CoreSpecLoader.rake_tasks_for(:rspec_core_specs)
-Opal::RSpec::ExpectationSpecLoader.rake_tasks_for(:rspec_expectation_specs)
-Opal::RSpec::SupportSpecLoader.rake_tasks_for(:rspec_support_specs)
-Opal::RSpec::MocksSpecLoader.rake_tasks_for(:rspec_mocks_specs)
+# Opal::RSpec::ExpectationSpecLoader.rake_tasks_for(:rspec_expectation_specs)
+# Opal::RSpec::SupportSpecLoader.rake_tasks_for(:rspec_support_specs)
+# Opal::RSpec::MocksSpecLoader.rake_tasks_for(:rspec_mocks_specs)
 
 # These are done
 desc 'Verifies all RSpec specs'

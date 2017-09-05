@@ -29,7 +29,7 @@ module Opal
           code << "config.instance_variable_set(:@color, #{color_value})"
         end
 
-        if (requires = spec_opts.scan(/--require \S+/)).any?
+        if (requires = spec_opts.scan(/(?:--require|-r) \S+/)).any?
           requires.map {|r| /--require (.*)/.match(r).captures[0]}.each do |req|
             code << %{require "#{req}"}
           end
