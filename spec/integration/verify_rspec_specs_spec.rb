@@ -10,9 +10,9 @@ RSpec.describe 'RSpec' do
       name = :rspec_core_specs
 
       results           = execute_specs name
-      puts results[:example_info]
-      next
+      # puts results[:example_info]
       parsed_results    = parse_results results
+      next
       summary           = parsed_results['summary']
       total             = summary['example_count']
       failed            = summary['failure_count']

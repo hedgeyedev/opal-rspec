@@ -211,7 +211,8 @@ module Opal
       end
 
       def execute_specs(name)
-        command_line = "SPEC_OPTS=\"--format Opal::RSpec::ProgressJsonFormatter\" rake #{name}"
+        # command_line = "SPEC_OPTS=\"--format Opal::RSpec::ProgressJsonFormatter\" rake #{name}"
+        command_line = "rake #{name}"
         puts "Running #{command_line}"
         pinger = Thread.new {
           while true
@@ -224,17 +225,12 @@ module Opal
         IO.popen(command_line).each do |line|
           line.force_encoding 'UTF-8'
           case state
-            when :progress
-              puts line
-            when :example_info
-              example_info << line
+          when :progress
+            puts line
+          when :example_info
+            example_info << line
           end
-          state = case line
-                    when /BEGIN JSON/
-                      :example_info
-                    else
-                      state
-                  end
+          state = :example_info if line =~ /BEGIN JSON/
         end.close
         pinger.exit
         {
