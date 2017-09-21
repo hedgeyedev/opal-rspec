@@ -15,6 +15,12 @@ class ::RSpec::Core::Formatters::Loader
     word.downcase
   end
 
+  alias add_without_fix add
+  def add(formatter_to_use, *paths)
+    paths = paths.map{|p| String === p ? file_at(p) : p }
+    add_without_fix(formatter_to_use, *paths)
+  end
+
   def custom_formatter(formatter_ref)
     if Class === formatter_ref
       formatter_ref

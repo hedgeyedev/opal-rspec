@@ -9,3 +9,12 @@ class ::RSpec::Core::Configuration
     # can't change requires @ this stage, this method calls RubyProject which will crash on Opal
   end
 end
+
+class ::RSpec::Core::ConfigurationOptions
+  def options_file_as_erb_string(path)
+    # ERB.new(File.read(path), nil, '-').result(binding)
+    # ERB.new(File.read(path), nil, '-')
+    ''
+  end
+end
+

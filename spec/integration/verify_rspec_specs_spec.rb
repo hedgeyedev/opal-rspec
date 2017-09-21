@@ -1,6 +1,5 @@
 require 'spec_helper'
 require 'rspec/opal_rspec_spec_loader'
-require 'rspec/core/core_spec_loader'
 
 RSpec.describe 'RSpec' do
   context 'Core' do
@@ -19,7 +18,10 @@ RSpec.describe 'RSpec' do
     end
 
     def files_with_line_continue
-      [/core\/example_spec.rb/, /pending_spec.rb/]
+      [
+        /core\/example_spec.rb/,
+        /pending_spec.rb/,
+      ]
     end
 
     def default_path
@@ -27,32 +29,38 @@ RSpec.describe 'RSpec' do
     end
 
     def spec_glob
-      %w{rspec-core/spec/**/*_spec.rb spec/rspec/core/opal_alternates/**/*_spec.rb}
+      [
+        'rspec-core/spec/rspec/core/filter_manager_spec.rb',
+        # 'rspec-core/spec/**/*_spec.rb',
+        # 'spec/rspec/core/opal_alternates/**/*_spec.rb',
+      ]
     end
 
     def stubbed_requires
       [
-          'rubygems',
-          'aruba/api', # Cucumber lib that supports file creation during testing, N/A for us
-          'simplecov', # hooks aren't available on Opal
-          'tmpdir',
-          'rspec/support/spec/shell_out', # only does stuff Opal can't support anyways
-          'rspec/support/spec/prevent_load_time_warnings'
+        'rubygems',
+        'aruba/api', # Cucumber lib that supports file creation during testing, N/A for us
+        'simplecov', # hooks aren't available on Opal
+        'tmpdir',
+        'rspec/support/spec/shell_out', # only does stuff Opal can't support anyways
+        'rspec/support/spec/prevent_load_time_warnings'
       ]
     end
 
     def additional_load_paths
       [
-          # 'rspec-core/spec' # a few spec support files live outside of rspec-core/spec/rspec and live in support
-          # "#{__dir__}../../../lib-opal-spec-support",
-          "lib-opal-spec-support",
+        # 'rspec-core/spec' # a few spec support files live outside of rspec-core/spec/rspec and live in support
+        # "#{__dir__}../../../lib-opal-spec-support",
+        "lib-opal-spec-support",
       ]
     end
 
     it 'has specs run correctly' do
-      name = :rspec_core_specs
+      results = run_specs
+      expect(results.success).to eq(true)
 
-      results           = execute_specs name
+
+
       # puts results[:example_info]
       parsed_results    = parse_results results
       next

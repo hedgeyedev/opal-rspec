@@ -1,6 +1,7 @@
 require 'tmpdir'
 require_relative 'filter_processor'
 require_relative 'support/colors'
+require 'opal-rspec'
 
 module Opal
   module RSpec
@@ -210,41 +211,42 @@ module Opal
         files_we_left_alone + fixed_temp_files
       end
 
-      def execute_specs(name)
-        # command_line = "SPEC_OPTS=\"--format Opal::RSpec::ProgressJsonFormatter\" rake #{name}"
-        command_line = "rake #{name}"
-        puts "Running #{command_line}"
-        pinger = Thread.new {
-          while true
-            sleep 60
-            puts 'still alive' # travis/keep alive
-          end
-        }
-        example_info = []
-        state = :progress
-        IO.popen(command_line).each do |line|
-          line.force_encoding 'UTF-8'
-          case state
-          when :progress
-            puts line
-          when :example_info
-            example_info << line
-          end
-          state = :example_info if line =~ /BEGIN JSON/
-        end.close
-        pinger.exit
-        {
-          example_info: example_info,
-          success: $?.success?
-        }
+      def run_specs
+        command_line = runner.command
+        command_line = "SPEC_OPTS=\"--format Opal::RSpec::ProgressJsonFormatter\" #{command_line}"
+        # puts "Running #{command_line}"
+        lines = []
+
+        keepalive_travis do
+          IO.popen(command_line).each do |line|
+            lines << line.force_encoding('UTF-8')
+          end.close
+        end
+        success = $?.success?
+        output = lines.join
+        # default_formatted, json_formatted = output.split(/BEGIN JSON/)
+        puts output.gsub(/(\A|\n)/, '\1> ')
+
+        Result.new(output, success)
+      end
+
+      Result = Struct.new(:output, :success)
+
+      def keepalive_travis
+        return yield unless ENV['TRAVIS']
+        travis_keepalive = Thread.new { loop { sleep 60; puts 'still alive' } }
+        result = yield
+        travis_keepalive.exit
+        result
       end
 
       def parse_results(results)
-        JSON.parse results[:example_info].join("\n")
+        # JSON.parse results.output
+        JSON.parse File.read('/tmp/spec_results.json')
       end
 
-      def rake_tasks_for(name)
-        Opal::RSpec::RakeTask.new(name) do |server, task|
+      def runner
+        @runner ||= ::Opal::RSpec::Runner.new do |server, task|
           # A lot of specs, can take longer on slower machines
           # task.timeout = 80000
           stub_requires
@@ -254,24 +256,6 @@ module Opal
           server.debug = ENV['OPAL_DEBUG']
           task.requires += ["opal/rspec/upstream-specs-support/#{short_name}/require_specs"]
         end
-      end
-
-      def run_rack_server(rack)
-        only_name = self.name.split('::').last
-
-        files = sub_in_files
-        sprockets_env = Opal::RSpec::SprocketsEnvironment.new(spec_pattern=nil, spec_exclude_pattern=nil, spec_files=files)
-        sprockets_env.default_path = default_path
-        sprockets_env.cache = ::Sprockets::Cache::FileStore.new(File.join('tmp', 'cache', only_name))
-        Opal::Config.arity_check_enabled = true
-        rack.run Opal::Server.new(sprockets: sprockets_env) { |s|
-                   s.main = 'opal/rspec/sprockets_runner'
-                   stub_requires
-                   append_additional_load_paths s
-                   sprockets_env.add_spec_paths_to_sprockets
-                   s.debug = ENV['OPAL_DEBUG']
-                   s.source_map = ENV['OPAL_DEBUG'] != nil
-                 }
       end
 
       private

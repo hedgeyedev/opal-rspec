@@ -4,7 +4,7 @@ require 'rspec/core/rake_task'
 Bundler::GemHelper.install_tasks
 
 require 'opal/rspec/rake_task'
-require_relative 'spec/rspec/core/core_spec_loader'
+# require_relative 'spec/rspec/core/core_spec_loader'
 require_relative 'spec/rspec/expectations/expectation_spec_loader'
 require_relative 'spec/rspec/support/support_spec_loader'
 require_relative 'spec/rspec/mocks/mocks_spec_loader'
