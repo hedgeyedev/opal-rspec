@@ -213,7 +213,7 @@ module Opal
 
       def run_specs
         command_line = runner.command
-        command_line = "SPEC_OPTS=\"--format Opal::RSpec::ProgressJsonFormatter\" #{command_line}"
+        # command_line = "SPEC_OPTS=\"--format Opal::RSpec::ProgressJsonFormatter\" #{command_line}"
         # puts "Running #{command_line}"
         lines = []
 
