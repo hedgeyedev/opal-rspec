@@ -96,51 +96,51 @@ RSpec.configure do |config|
 end
 
 
-def Dir.tmpdir(prefix_suffix=nil, tmpdir=nil, *rest)
-  p `require('os').tmpdir()`
-end
-
-require 'fileutils'
-module FileUtils
-  extend self
-  def remove_entry(path, force = false)
-    `require('fs').rmdirSync(path)`
-  end
-end
-
-def Dir.mktmpdir(prefix_suffix=nil, tmpdir=nil, *rest)
-  tmpdir ||= Dir.tmpdir
-  case prefix_suffix
-  when String
-    prefix = prefix_suffix
-  when Array
-    prefix, suffix = prefix_suffix
-  else
-    prefix = 'd'
-  end
-
-  rand_name = rand.to_s[2..-1]
-  name = "#{prefix}#{rand_name}#{suffix}"
-  path = File.join(tmpdir, name)
-  Dir.mkdir(path)
-
-  if block_given?
-    begin
-      yield path
-    ensure
-      # stat = File.stat(File.dirname(path))
-      # if stat.world_writable? and !stat.sticky?
-      #   raise ArgumentError, "parent directory is world writable but not sticky"
-      # end
-      FileUtils.remove_entry path
-    end
-  else
-    path
-  end
-end
-
-class File
-  def rewind
-
-  end
-end
+# def Dir.tmpdir(prefix_suffix=nil, tmpdir=nil, *rest)
+#   `require('os').tmpdir()`
+# end
+#
+# require 'fileutils'
+# module FileUtils
+#   extend self
+#   def remove_entry(path, force = false)
+#     `require('fs').rmdirSync(path)`
+#   end
+# end
+#
+# def Dir.mktmpdir(prefix_suffix=nil, tmpdir=nil, *rest)
+#   tmpdir ||= Dir.tmpdir
+#   case prefix_suffix
+#   when String
+#     prefix = prefix_suffix
+#   when Array
+#     prefix, suffix = prefix_suffix
+#   else
+#     prefix = 'd'
+#   end
+#
+#   rand_name = rand.to_s[2..-1]
+#   name = "#{prefix}#{rand_name}#{suffix}"
+#   path = File.join(tmpdir, name)
+#   Dir.mkdir(path)
+#
+#   if block_given?
+#     begin
+#       yield path
+#     ensure
+#       # stat = File.stat(File.dirname(path))
+#       # if stat.world_writable? and !stat.sticky?
+#       #   raise ArgumentError, "parent directory is world writable but not sticky"
+#       # end
+#       FileUtils.remove_entry path
+#     end
+#   else
+#     path
+#   end
+# end
+#
+# class File
+#   def rewind
+#
+#   end
+# end

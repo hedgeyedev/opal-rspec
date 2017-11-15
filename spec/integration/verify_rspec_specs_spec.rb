@@ -30,7 +30,7 @@ RSpec.describe 'RSpec' do
 
     def spec_glob
       [
-        'rspec-core/spec/rspec/core/backtrace_formatter_spec.rb',
+        # 'rspec-core/spec/rspec/core/backtrace_formatter_spec.rb',
         'rspec-core/spec/rspec/core/configuration_options_spec.rb',
         'rspec-core/spec/rspec/core/configuration_spec.rb',
         'rspec-core/spec/rspec/core/drb_spec.rb',
@@ -45,6 +45,7 @@ RSpec.describe 'RSpec' do
         'rspec-core/spec/rspec/core/formatters/base_text_formatter_spec.rb',
         'rspec-core/spec/rspec/core/formatters/console_codes_spec.rb',
         'rspec-core/spec/rspec/core/formatters/deprecation_formatter_spec.rb',
+
         # 'rspec-core/spec/rspec/core/formatters/documentation_formatter_spec.rb',
         # 'rspec-core/spec/rspec/core/formatters/helpers_spec.rb',
         # 'rspec-core/spec/rspec/core/formatters/html_formatter_spec.rb',
