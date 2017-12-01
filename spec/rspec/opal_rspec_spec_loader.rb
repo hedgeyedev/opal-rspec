@@ -226,12 +226,21 @@ module Opal
         # success = $?.success?
         # output = lines.join
         # default_formatted, json_formatted = output.split(/BEGIN JSON/)
-
-        $stdout = StringIO.new
-        output = cli.run
-
-        puts output.gsub(/(\A|\n)/, '\1> ')
-
+        output_io = StringIO.new
+        previous_stdout = $stdout
+        previous_stderr = $stderr
+        $stdout = output_io
+        $stderr = output_io
+        begin
+          exit_status = runner.run
+        ensure
+          $stdout = previous_stdout
+          $stderr = previous_stderr
+        end
+        output_io.rewind
+        output = output_io.read
+        # puts output.gsub(/(\A|\n)/, '\1> ')
+        success = exit_status == 0
         Result.new(output, success)
       end
 

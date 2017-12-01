@@ -76,7 +76,7 @@ OpalFilters.group("Bugs") do
   fails "RSpec::Core::FilterManager#prune prefers location to exclusion filter on entire group",  "expected: [#<RSpec::Core::Example:0x127aa>]"
   fails "RSpec::Core::FilterManager#inclusions#description cleans up the description",  "expected \"#<Proc:0x130e6>\" to include \"/Users/elia/Code/opal-rspec\""
   fails "RSpec::Core::FilterManager#exclusions#description cleans up the description",  "expected \"#<Proc:0x1317a>\" to include \"/Users/elia/Code/opal-rspec\""
-  # fails "RSpec::Core::Formatters::BaseTextFormatter when closing the formatter does not close an already closed output stream",  "undefined method `mktmpdir' for Dir"
+  fails "RSpec::Core::Formatters::BaseTextFormatter when closing the formatter does not close an already closed output stream",  "undefined method `mktmpdir' for Dir"
   fails "RSpec::Core::Formatters::BaseTextFormatter#dump_summary includes command to re-run each failed example",  "expected \"\\nFinished in 1 second (files took 0 seconds to load)\\n1 example, 1 failure\\n\\nFilter faile"
   fails "RSpec::Core::Formatters::BaseTextFormatter#dump_failures with an exception that has a differently encoded message runs without encountering an encoding exception",  "expected \"\\nFailures:\\n\\n  1) group name Mixing encodings, e.g. UTF-8: © and Binary\\n     Failure/Err"
   fails "RSpec::Core::Formatters::BaseTextFormatter#dump_failures with a failed expectation (rspec-expectations) does not show the error class",  "expected \"\\nFailures:\\n\\n  1) group name example name\\n     Failure/Error: Unable to find matching li"
@@ -88,8 +88,11 @@ end
 RSpec.configure do |config|
   # config.filter_run_excluding :full_description => Regexp.union(expected_failures.map { |d| Regexp.new(d) })
   # config.filter_run_excluding :full_description => -> desc { unsupported.include? desc }
-  config.before(:each) do |example|
+  config.around(:each) do |example|
+    p example.full_description if example.full_description.include? 'when closing the formatter'
+
     pending OpalFilters.pending_message(example) if OpalFilters.filtered?(example)
+    example.call
   end
 
   # config.add_formatter OpalFilters::FiltersFormatter, $stdout
