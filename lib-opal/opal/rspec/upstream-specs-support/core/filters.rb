@@ -127,6 +127,29 @@ OpalFilters.group("Bugs") do
   fails "RSpec::Core::Metadata backwards compatibility :describes on an example group metadata hash issues a deprecation warning",  "undefined method `deprecate' for RSpec"
   fails "RSpec::Core::Metadata backwards compatibility :describes an an example metadata hash returns the described_class",  "undefined method `deprecate' for RSpec"
   fails "RSpec::Core::Metadata backwards compatibility :describes an an example metadata hash issues a deprecation warning",  "undefined method `deprecate' for RSpec"
+
+  fails "an example declared pending with metadata uses the value assigned to :pending as the message",  "undefined method `deprecate' for RSpec"
+  fails "an example declared pending with metadata sets the message to 'No reason given' if :pending => true",  "undefined method `deprecate' for RSpec"
+  fails "an example declared pending with metadata passes if a mock expectation is not satisifed",  "undefined method `deprecate' for RSpec"
+  fails "an example made pending with `define_derived_metadata` has a pending result if there is an error",  "undefined method `deprecate' for RSpec"
+  fails "an example with no block is listed as pending with 'Not yet implemented'",  "undefined method `deprecate' for RSpec"
+  fails "an example with no args is listed as pending with the default message",  "undefined method `deprecate' for RSpec"
+  fails "an example with a message is listed as pending with the supplied message",  "undefined method `deprecate' for RSpec"
+  fails "an example with a block fails with an ArgumentError stating the syntax is deprecated",  "undefined method `deprecate' for RSpec"
+
+  fails "RSpec::Core::MemoizedHelpers explicit subject defined in a top level group raises an error when referenced from `before(:all)`",  "expected \"subject accessed in a `before(:context)` hook at:\\n  \\n\\n`let` and `subject` declarations a"
+  fails "RSpec::Core::MemoizedHelpers explicit subject defined in a top level group raises an error when referenced from `after(:all)`",  "expected \"subject accessed in an `after(:context)` hook at:\\n  \\n\\n`let` and `subject` declarations a"
+  fails "RSpec::Core::MemoizedHelpers explicit subject with a name when `super` is used raises a \"not supported\" error",  "expected: \"failed\""
+  fails "RSpec::Core::MemoizedHelpers explicit subject with a name when `super` is used with a `let` definition before the named subject raises a \"not supported\" error",  "expected: \"failed\""
+  fails "#let raises an error when referenced from `before(:all)`",  "expected \"let declaration `foo` accessed in a `before(:context)` hook at:\\n  \\n\\n`let` and `subject` "
+  fails "#let raises an error when referenced from `after(:all)`",  "expected \"let declaration `foo` accessed in an `after(:context)` hook at:\\n  \\n\\n`let` and `subject` "
+  fails "Module#define_method is still a private method",  "expected NoMethodError but nothing was raised"
+
+  fails "RSpec::Core::Formatters::JsonFormatter outputs json (brittle high level functional test)",  "expected: {\"examples\"=>[{\"description\"=>\"succeeds\", \"full_description\"=>\"one apiece succeeds\", \"statu"
+  fails "RSpec::Core::Formatters::JsonFormatter#dump_profile with multiple example groups provides the slowest example groups",  "could not find current class for super()"
+  fails "RSpec::Core::Formatters::JsonFormatter#dump_profile with multiple example groups provides information",  "could not find current class for super()"
+  fails "RSpec::Core::Formatters::JsonFormatter#dump_profile with multiple example groups ranks the example groups by average time",  "could not find current class for super()"
+
 end
 
 RSpec.configure do |config|

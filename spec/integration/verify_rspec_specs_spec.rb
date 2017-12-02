@@ -36,25 +36,25 @@ RSpec.describe 'RSpec specs:' do
         # 'rspec-core/spec/rspec/core/formatters/documentation_formatter_spec.rb',
         # 'rspec-core/spec/rspec/core/formatters/helpers_spec.rb',
         # 'rspec-core/spec/rspec/core/formatters/html_formatter_spec.rb',
-        # 'rspec-core/spec/rspec/core/formatters/json_formatter_spec.rb',
-        # 'rspec-core/spec/rspec/core/formatters/profile_formatter_spec.rb',
+        'rspec-core/spec/rspec/core/formatters/json_formatter_spec.rb',
+        'rspec-core/spec/rspec/core/formatters/profile_formatter_spec.rb',
         # 'rspec-core/spec/rspec/core/formatters/progress_formatter_spec.rb',
         # 'rspec-core/spec/rspec/core/formatters/snippet_extractor_spec.rb',
 
         # 'rspec-core/spec/rspec/core/formatters_spec.rb',
-        # 'rspec-core/spec/rspec/core/hooks_filtering_spec.rb',
+        'rspec-core/spec/rspec/core/hooks_filtering_spec.rb',
         'rspec-core/spec/rspec/core/hooks_spec.rb',
-        # 'rspec-core/spec/rspec/core/memoized_helpers_spec.rb',
-        # 'rspec-core/spec/rspec/core/metadata_filter_spec.rb',
+        'rspec-core/spec/rspec/core/memoized_helpers_spec.rb',
+        'rspec-core/spec/rspec/core/metadata_filter_spec.rb',
         'rspec-core/spec/rspec/core/metadata_spec.rb',
         'rspec-core/spec/rspec/core/notifications_spec.rb',
         # 'rspec-core/spec/rspec/core/option_parser_spec.rb',
         # 'rspec-core/spec/rspec/core/ordering_spec.rb',
-        # 'rspec-core/spec/rspec/core/pending_example_spec.rb',
-        # 'rspec-core/spec/rspec/core/pending_spec.rb',
+        'rspec-core/spec/rspec/core/pending_example_spec.rb',
+        'rspec-core/spec/rspec/core/pending_spec.rb',
         # 'rspec-core/spec/rspec/core/project_initializer_spec.rb',
         # 'rspec-core/spec/rspec/core/rake_task_spec.rb',
-        # 'rspec-core/spec/rspec/core/random_spec.rb',
+        'rspec-core/spec/rspec/core/random_spec.rb',
         'rspec-core/spec/rspec/core/reporter_spec.rb',
 
         'rspec-core/spec/rspec/core/rspec_matchers_spec.rb',
@@ -98,7 +98,7 @@ RSpec.describe 'RSpec specs:' do
         puts results.quoted_output
       end
 
-      expect(results.json[:summary_line]).to eq("538 examples, 0 failures, 75 pending")
+      expect(results.json[:summary_line]).to eq("652 examples, 0 failures, 94 pending")
       expect(failures).to eq([])
       expect(results).to be_successful
     end
