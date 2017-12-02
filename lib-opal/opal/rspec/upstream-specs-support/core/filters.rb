@@ -150,6 +150,30 @@ OpalFilters.group("Bugs") do
   fails "RSpec::Core::Formatters::JsonFormatter#dump_profile with multiple example groups provides information",  "could not find current class for super()"
   fails "RSpec::Core::Formatters::JsonFormatter#dump_profile with multiple example groups ranks the example groups by average time",  "could not find current class for super()"
 
+  fails "RSpec::Core::Formatters::Loader#add(formatter) when a legacy formatter is added with RSpec::LegacyFormatters loads formatters from the external gem",  "could not find current class for super()"
+  fails "RSpec::Core::Formatters::Loader#add(formatter) when a legacy formatter is added with RSpec::LegacyFormatters subscribes the formatter to the notifications the adaptor implements",  "could not find current class for super()"
+  fails "RSpec::Core::Formatters::Loader#add(formatter) with a 2nd arg defining the output creates a file at that path and sets it as the output",  "undefined method `tmpdir' for Dir"
+  fails "RSpec::Core::Formatters::Loader#add(formatter) with a 2nd arg defining the output accepts Pathname objects for file paths",  "undefined method `tmpdir' for Dir"
+  fails "RSpec::Core::Formatters::Loader#add(formatter) when a duplicate formatter exists adds the formatter for different output targets",  "undefined method `tmpdir' for Dir"
+
+  fails "RSpec::Core::Formatters::DeprecationFormatter#deprecation with a File deprecation_stream prints a message if provided, ignoring other data",  "undefined method `tmpdir' for Dir"
+  fails "RSpec::Core::Formatters::DeprecationFormatter#deprecation with a File deprecation_stream surrounds multiline messages in fenceposts",  "undefined method `tmpdir' for Dir"
+  fails "RSpec::Core::Formatters::DeprecationFormatter#deprecation with a File deprecation_stream includes the method",  "undefined method `tmpdir' for Dir"
+  fails "RSpec::Core::Formatters::DeprecationFormatter#deprecation with a File deprecation_stream includes the replacement",  "undefined method `tmpdir' for Dir"
+  fails "RSpec::Core::Formatters::DeprecationFormatter#deprecation with a File deprecation_stream includes the call site if provided",  "undefined method `tmpdir' for Dir"
+  fails "RSpec::Core::Formatters::DeprecationFormatter#deprecation_summary with a File deprecation_stream prints a count of the deprecations",  "undefined method `tmpdir' for Dir"
+  fails "RSpec::Core::Formatters::DeprecationFormatter#deprecation_summary with a File deprecation_stream pluralizes the reported deprecation count for more than one deprecation",  "undefined method `tmpdir' for Dir"
+  fails "RSpec::Core::Formatters::DeprecationFormatter#deprecation_summary with a File deprecation_stream is not printed when there are no deprecations",  "undefined method `tmpdir' for Dir"
+  fails "RSpec::Core::Formatters::DeprecationFormatter#deprecation_summary with a File deprecation_stream uses synchronized/non-buffered output to work around odd duplicate output behavior we have observed",  "undefined method `tmpdir' for Dir"
+  fails "RSpec::Core::Formatters::DeprecationFormatter#deprecation_summary with a File deprecation_stream does not print duplicate messages",  "undefined method `tmpdir' for Dir"
+
+  fails "RSpec::Core::Formatters::ProgressFormatter produces the expected full output",  "String#gsub! not supported. Mutable String methods are not supported in Opal."
+
+  fails "RSpec::Core::Formatters::DocumentationFormatter produces the expected full output",  "String#gsub! not supported. Mutable String methods are not supported in Opal."
+
+  fails "RSpec loads mocks and expectations when the constants are referenced",  "undefined method `run_ruby_with_current_load_path' for #<RSpec::ExampleGroups::RSpec:0x34620>"
+  fails "RSpec::Core.path_to_executable returns the absolute location of the exe/rspec file",  "expected: truthy value"
+
 end
 
 RSpec.configure do |config|
@@ -164,7 +188,6 @@ RSpec.configure do |config|
 
   # config.add_formatter OpalFilters::FiltersFormatter, $stdout
 end
-
 
 # def Dir.tmpdir(prefix_suffix=nil, tmpdir=nil, *rest)
 #   `require('os').tmpdir()`
