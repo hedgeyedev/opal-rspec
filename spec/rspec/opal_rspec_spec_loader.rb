@@ -17,10 +17,6 @@ module Opal
         []
       end
 
-      def unstub_requires
-        []
-      end
-
       def additional_load_paths
         []
       end
@@ -44,10 +40,6 @@ module Opal
 
       def stub_requires
         stubbed_requires.each { |f| ::Opal::Config.stubbed_files << f }
-        unstub_requires.each do |f|
-          puts "Unstubbing #{f} per test request"
-          ::Opal::Config.stubbed_files.delete f
-        end
       end
 
       def symbols_replace_regexes
@@ -237,14 +229,31 @@ module Opal
           $stdout = previous_stdout
           $stderr = previous_stderr
         end
+
         output_io.rewind
-        output = output_io.read
-        # puts output.gsub(/(\A|\n)/, '\1> ')
-        success = exit_status == 0
-        Result.new(output, success)
+
+        Result.new(
+          exit_status,
+          output_io.read,
+          JSON.parse(File.read('/tmp/spec_results.json'), symbolize_names: true),
+        )
       end
 
-      Result = Struct.new(:output, :success)
+      class Result < Struct.new(:exit_status, :output, :json)
+        def quoted_output
+          output.gsub(/(\A|\n)/, '\1> ')
+        end
+
+        def successful?
+          exit_status == 0
+        end
+
+        def inspect
+          "#<struct #{self.class.name} exit_status=#{exit_status} summary=#{json[:summary_line].inspect}>"
+        end
+
+        alias to_s inspect
+      end
 
       def keepalive_travis
         return yield unless ENV['TRAVIS']
@@ -254,10 +263,14 @@ module Opal
         result
       end
 
-      def parse_results(results)
-        # JSON.parse results.output
-        JSON.parse File.read('/tmp/spec_results.json')
+      def base_dir
+        "spec/rspec/#{short_name}"
       end
+
+      def default_path
+        "rspec-#{short_name}/spec"
+      end
+
 
       def runner
         @runner ||= ::Opal::RSpec::Runner.new do |server, task|

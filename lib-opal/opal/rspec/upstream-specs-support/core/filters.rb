@@ -36,6 +36,11 @@ module OpalFilters
   end
 end
 
+OpalFilters.group("Bugs: Backtrace") do
+  fails "RSpec::Core::World#preceding_declaration_line (again) with one example returns the argument line number if an example starts on that line",  "expected: 1"
+  fails "RSpec::Core::World#preceding_declaration_line (again) with one example returns line number of an example that immediately precedes the argument line",  "expected: 1"
+end
+
 OpalFilters.group("Unsupported") do
   # fails "RSpec::Core::ExampleGroup minimizes the number of methods that users could inadvertantly overwrite", "extra method coming from opal"
   # fails 'RSpec::Core::FilterManager#prune prefers location to exclusion filter', 'unsupported source location'
@@ -83,6 +88,45 @@ OpalFilters.group("Bugs") do
   fails "RSpec::Core::Formatters::BaseTextFormatter#dump_failures with a failed message expectation (rspec-mocks) does not show the error class",  "expected \"\\nFailures:\\n\\n  1) group name example name\\n     Failure/Error: Unable to find matching li"
   fails "RSpec::Core::Formatters::BaseTextFormatter#dump_failures for #shared_examples outputs the name and location",  "expected \"\\nFailures:\\n\\n  1) group name it should behave like foo bar example name\\n     Failure/Err"
   fails "RSpec::Core::Formatters::BaseTextFormatter#dump_failures for #shared_examples that contains nested example groups outputs the name and location",  "expected \"\\nFailures:\\n\\n  1) group name it should behave like foo bar nested group example name\\n   "
+
+  fails "rspec warnings and deprecations #deprecate passes the hash to the reporter",  "undefined method `deprecate' for RSpec"
+  fails "rspec warnings and deprecations #deprecate adds the call site",  "undefined method `deprecate' for RSpec"
+  fails "rspec warnings and deprecations #deprecate doesn't override a passed call site",  "undefined method `deprecate' for RSpec"
+  fails "rspec warnings and deprecations #warn_with when :use_spec_location_as_call_site => true is passed adds the source location of spec",  "Kernel received \"warn\" with unexpected arguments"
+  fails "rspec warnings and deprecations #warn_with when :use_spec_location_as_call_site => true is passed appends a period to the supplied message if one is not present",  "Kernel received \"warn\" with unexpected arguments"
+
+  fails "RSpec::Core::Hooks when an error happens in `after(:suite)` allows the error to propagate to the user",  "expected ZeroDivisionError but nothing was raised"
+  fails "RSpec::Core::Hooks when an error happens in `before(:suite)` allows the error to propagate to the user",  "expected ZeroDivisionError but nothing was raised"
+  fails "RSpec::Core::Hooks#around does not consider the hook to have run when passed as a block to a method that does not yield",  "expected: \"pending\""
+  fails "RSpec::Core::Hooks#around when it does not run the example indicates which around hook did not run the example in the pending message",  "expected: \"around hook at /Users/elia/Code/opal-rspec/rspec-core/spec/rspec/core/hooks_spec:143 did n"
+  fails "RSpec::Core::Hooks#around when it does not run the example for a hook declared in the group converts the example to a skipped example so the user is made aware of it",  "expected: \"pending\""
+  fails "RSpec::Core::Hooks#around when it does not run the example for a hook declared in config converts the example to a skipped example so the user is made aware of it",  "expected: \"pending\""
+  fails "RSpec::Core::Metadata.relative_path transforms absolute paths to relative paths",  "expected: \".\""
+  fails "RSpec::Core::Metadata for an example extracts file path from caller",  "expected {\"execution_result\"=>#<RSpec::Core::Example::ExecutionResult:0x1d280>, \"block\"=>nil, \"descri"
+  fails "RSpec::Core::Metadata for an example extracts line number from caller",  "expected {\"execution_result\"=>#<RSpec::Core::Example::ExecutionResult:0x1d350>, \"block\"=>nil, \"descri"
+  fails "RSpec::Core::Metadata for an example extracts location from caller",  "expected {\"execution_result\"=>#<RSpec::Core::Example::ExecutionResult:0x1d420>, \"block\"=>nil, \"descri"
+  fails "RSpec::Core::Metadata :described_class in an outer group with a Symbol returns the symbol",  "expected #<String:group> => \"group\""
+  fails "RSpec::Core::Metadata :description on a group with a non-string and a string concats the args",  "expected: \"Object group\""
+  fails "RSpec::Core::Metadata :full_description with a 2nd arg starting with # removes the space",  "expected: \"Array#method\""
+  fails "RSpec::Core::Metadata :full_description with a 2nd arg starting with . removes the space",  "expected: \"Array.method\""
+  fails "RSpec::Core::Metadata :full_description with a 2nd arg starting with :: removes the space",  "expected: \"Array::method\""
+  fails "RSpec::Core::Metadata :file_path finds the first non-rspec lib file in the caller array",  "expected: \"/Users/elia/Code/opal-rspec/rspec-core/spec/rspec/core/metadata_spec\""
+  fails "RSpec::Core::Metadata :line_number finds the line number with the first non-rspec lib file in the backtrace",  "expected: 418"
+  fails "RSpec::Core::Metadata backwards compatibility :example_group issues a deprecation warning when the `:example_group` key is accessed",  "undefined method `deprecate' for RSpec"
+  fails "RSpec::Core::Metadata backwards compatibility :example_group does not issue a deprecation warning when :example_group is accessed while applying configured filterings",  "undefined method `deprecate' for RSpec"
+  fails "RSpec::Core::Metadata backwards compatibility :example_group can still access the example group attributes via [:example_group]",  "undefined method `deprecate' for RSpec"
+  fails "RSpec::Core::Metadata backwards compatibility :example_group can access the parent example group attributes via [:example_group][:example_group]",  "undefined method `deprecate' for RSpec"
+  fails "RSpec::Core::Metadata backwards compatibility :example_group works properly with deep nesting",  "undefined method `deprecate' for RSpec"
+  fails "RSpec::Core::Metadata backwards compatibility :example_group works properly with shallow nesting",  "undefined method `deprecate' for RSpec"
+  fails "RSpec::Core::Metadata backwards compatibility :example_group allows integration libraries like VCR to infer a fixture name from the example description by walking up nesting structure",  "undefined method `deprecate' for RSpec"
+  fails "RSpec::Core::Metadata backwards compatibility :example_group can mutate attributes when accessing them via [:example_group]",  "undefined method `deprecate' for RSpec"
+  fails "RSpec::Core::Metadata backwards compatibility :example_group can still be filtered via a nested key under [:example_group] as before",  "expected true"
+  fails "RSpec::Core::Metadata backwards compatibility :example_group_block returns the block",  "undefined method `deprecate' for RSpec"
+  fails "RSpec::Core::Metadata backwards compatibility :example_group_block issues a deprecation warning",  "undefined method `deprecate' for RSpec"
+  fails "RSpec::Core::Metadata backwards compatibility :describes on an example group metadata hash returns the described_class",  "undefined method `deprecate' for RSpec"
+  fails "RSpec::Core::Metadata backwards compatibility :describes on an example group metadata hash issues a deprecation warning",  "undefined method `deprecate' for RSpec"
+  fails "RSpec::Core::Metadata backwards compatibility :describes an an example metadata hash returns the described_class",  "undefined method `deprecate' for RSpec"
+  fails "RSpec::Core::Metadata backwards compatibility :describes an an example metadata hash issues a deprecation warning",  "undefined method `deprecate' for RSpec"
 end
 
 RSpec.configure do |config|
