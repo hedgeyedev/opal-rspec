@@ -9,10 +9,6 @@ module Opal
       include Rake::DSL
       include Colors
 
-      def files_with_line_continue
-        []
-      end
-
       def files_with_multiline_regex
         []
       end
@@ -163,44 +159,7 @@ module Opal
 
       def sub_in_files
         files = get_file_list
-        with_sub = sub_in_end_of_line files
-        remove_multiline_regexes with_sub
-      end
-
-      # https://github.com/opal/opal/issues/821
-      def sub_in_end_of_line(files)
-        bad_regex = /^(.*)\\$/
-        fix_these_files = files.select { |f| files_with_line_continue.any? { |regex| regex.match(f) } }
-        return files unless fix_these_files.any?
-        dir = get_tmp_load_path_dir
-        missing = []
-        fixed_temp_files = fix_these_files.map do |path|
-          temp_filename = File.join dir, File.basename(path)
-          found_blackslash = false
-          File.open path, 'r' do |input_file|
-            File.open temp_filename, 'w' do |output_file|
-              fixed_lines = input_file.inject do |line1, line2|
-                existing_lines = [*line1]
-                if (a_match = bad_regex.match existing_lines.last)
-                  found_blackslash = true
-                  line_num = existing_lines.length
-                  patching "Replacing trailing backlash, line #{line_num} in #{path} in new temp file", temp_filename
-                  without_last_line = existing_lines[0..-2]
-                  without_backlash = a_match.captures[0]
-                  without_last_line << (without_backlash + ' ' + line2)
-                else
-                  existing_lines << line2
-                end
-              end
-              fixed_lines.each { |l| output_file << l }
-            end
-          end
-          missing << path unless found_blackslash
-          temp_filename
-        end
-        raise "Expected to fix blackslash continuation in #{fix_these_files} but we didn't find any backslashes in #{missing}. Check if RSpec has been upgraded (maybe those blackslashes are gone??)" if missing.any?
-        files_we_left_alone = files - fix_these_files
-        files_we_left_alone + fixed_temp_files
+        remove_multiline_regexes files
       end
 
       def run_specs

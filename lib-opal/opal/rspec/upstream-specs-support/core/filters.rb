@@ -1,40 +1,4 @@
-module OpalFilters
-  extend self
-
-  # class FiltersFormatter < RSpec::Core::Formatters::BaseFormatter
-    # RSpec::Core::Formatters.register self, :dump_summary
-  ::RSpec::Core::Notifications::SummaryNotification.class_eval do
-    def colorized_rerun_commands(colorizer=::RSpec::Core::Formatters::ConsoleCodes)
-      "\nFilter failed examples:\n\n" +
-      failed_examples.map do |example|
-        colorizer.wrap("fails #{example.full_description.inspect}, ", RSpec.configuration.failure_color) + " " +
-        colorizer.wrap("#{example.execution_result.exception.message.strip.split("\n").first[0..100].inspect}", RSpec.configuration.detail_color)
-      end.join("\n")
-    end
-  end
-
-  def group(name, &block)
-    old_name = @name
-    @name = name
-    @filters ||= {}
-    instance_eval(&block)
-    @name = old_name
-  end
-
-  def fails full_description, note = nil
-    note = "#{name}: #{note || FIXME}"
-    @filters[full_description] = note || full_description
-  end
-
-  def filtered?(example)
-    @filters[example.full_description]
-  end
-
-  def pending_message(example)
-    note = @filters[example.full_description]
-    "#{@name}: #{note}"
-  end
-end
+require 'opal/rspec/upstream-specs-support/opal_filters'
 
 OpalFilters.group("Bugs: Backtrace") do
   fails "RSpec::Core::World#preceding_declaration_line (again) with one example returns the argument line number if an example starts on that line",  "expected: 1"
@@ -65,9 +29,6 @@ OpalFilters.group("Bugs") do
   fails "RSpec::Core::Example when there is no explicit description when `expect_with :stdlib` is configured uses the file and line number",  "expected \"example at \" to match /example at \\/var\\/folders\\/w0\\/yjfqr9n94ld7ft4j3hlz_fsm0000gn\\/T\\/d20170924-23861-zf96qt\\/example_spec:153/"
   fails "RSpec::Core::Example#run when the example raises an error leaves a raised exception unmodified (GH-1103)",  "undefined method `set_backtrace' for #<StandardError: StandardError>:StandardError"
   fails "RSpec::Core::Example#pending in the example sets the backtrace to the example definition so it can be located by the user",  "\nexpected: [\"/var/folders/w0/yjfqr9n94ld7ft4j3hlz_fsm0000gn/T/d20170924-23861-zf96qt/example_spec\", \"447\"]\n     got: [\"PendingExampleFixedError\", \" Expected example to fail since it is pending, but it passed.\"]\n\n(compared using ==)\n"
-  fails "RSpec::Core::Example#pending in before(:all) fails with an ArgumentError if a block is provided",  "undefined method `deprecate' for RSpec"
-  fails "RSpec::Core::Example#skip in the example with a message sets the example to skipped with the provided message",  "undefined method `deprecate' for RSpec"
-  fails "RSpec::Core::Example#skip in before(:all) sets each example to pending",  "undefined method `deprecate' for RSpec"
 
   fails "RSpec::Core::ExampleGroup constant naming disambiguates name collisions by appending a number",  "expected RSpec::ExampleGroups::Collisioo_0 to have class const \"Collision_10\""
   fails "RSpec::Core::ExampleGroup ordering when tagged with an unrecognized ordering prints a warning so users are notified of their mistake",  "expected \"WARNING: Ignoring unknown ordering specified using `:order => \\\"unrecognized\\\"` metadata.\\n         Falling back to configured global ordering.\\n         Unrecognized ordering specified at: \\n\" to match /example_group_spec:182/"
@@ -175,65 +136,3 @@ OpalFilters.group("Bugs") do
   fails "RSpec::Core.path_to_executable returns the absolute location of the exe/rspec file",  "expected: truthy value"
 
 end
-
-RSpec.configure do |config|
-  # config.filter_run_excluding :full_description => Regexp.union(expected_failures.map { |d| Regexp.new(d) })
-  # config.filter_run_excluding :full_description => -> desc { unsupported.include? desc }
-  config.around(:each) do |example|
-    p example.full_description if example.full_description.include? 'when closing the formatter'
-
-    pending OpalFilters.pending_message(example) if OpalFilters.filtered?(example)
-    example.call
-  end
-
-  # config.add_formatter OpalFilters::FiltersFormatter, $stdout
-end
-
-# def Dir.tmpdir(prefix_suffix=nil, tmpdir=nil, *rest)
-#   `require('os').tmpdir()`
-# end
-#
-# require 'fileutils'
-# module FileUtils
-#   extend self
-#   def remove_entry(path, force = false)
-#     `require('fs').rmdirSync(path)`
-#   end
-# end
-#
-# def Dir.mktmpdir(prefix_suffix=nil, tmpdir=nil, *rest)
-#   tmpdir ||= Dir.tmpdir
-#   case prefix_suffix
-#   when String
-#     prefix = prefix_suffix
-#   when Array
-#     prefix, suffix = prefix_suffix
-#   else
-#     prefix = 'd'
-#   end
-#
-#   rand_name = rand.to_s[2..-1]
-#   name = "#{prefix}#{rand_name}#{suffix}"
-#   path = File.join(tmpdir, name)
-#   Dir.mkdir(path)
-#
-#   if block_given?
-#     begin
-#       yield path
-#     ensure
-#       # stat = File.stat(File.dirname(path))
-#       # if stat.world_writable? and !stat.sticky?
-#       #   raise ArgumentError, "parent directory is world writable but not sticky"
-#       # end
-#       FileUtils.remove_entry path
-#     end
-#   else
-#     path
-#   end
-# end
-#
-# class File
-#   def rewind
-#
-#   end
-# end
