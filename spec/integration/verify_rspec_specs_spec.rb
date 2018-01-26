@@ -29,7 +29,8 @@ RSpec.describe 'RSpec specs:' do
       'simplecov', # hooks aren't available on Opal
       'tmpdir',
       'rspec/support/spec/shell_out', # only does stuff Opal can't support anyways
-      'rspec/support/spec/prevent_load_time_warnings'
+      'rspec/support/spec/prevent_load_time_warnings',
+      'timeout',
     ]
   end
 
@@ -47,7 +48,7 @@ RSpec.describe 'RSpec specs:' do
     let(:short_name) { 'core' }
 
     it 'runs correctly' do
-      expect_results_to_be("726 examples, 0 failures, 110 pending")
+      expect_results_to_be("727 examples, 0 failures, 111 pending")
     end
   end
 
@@ -56,7 +57,7 @@ RSpec.describe 'RSpec specs:' do
     let(:short_name) { 'support' }
 
     it 'runs correctly' do
-      expect_results_to_be("65 examples, 0 failures, 13 pending")
+      expect_results_to_be("66 examples, 0 failures, 14 pending")
     end
   end
 
