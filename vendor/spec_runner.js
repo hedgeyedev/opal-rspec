@@ -1,17 +1,19 @@
 /*
  * Test runner for phantomjs
  */
-var args = phantom.args;
-var page = require('webpage').create();
+// var args = phantom.args;
 
+var page = require('webpage').create();
+var system = require('system');
+var args = system.args.slice(1);
 page.onConsoleMessage = function(msg) {
-  console.log(msg);
+    console.log(msg);
 };
 
 page.onInitialized = function() {
-  page.evaluate(function () {
-    window.OPAL_SPEC_PHANTOM = true;
-  });
+    page.evaluate(function () {
+        window.OPAL_SPEC_PHANTOM = true;
+    });
 };
 
 /*
