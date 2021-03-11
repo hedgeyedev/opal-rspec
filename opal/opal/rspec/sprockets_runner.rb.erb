@@ -5,6 +5,7 @@ require 'opal'
 require 'opal-rspec'
 
 <% Dir.glob('spec/**/*_spec.{rb,opal}').each do |s| %>
+    <% puts "\n\n#{s}\n\n" %>
 require <%= s.sub(/^spec\//, '').sub(/\.(rb|opal)$/, '').inspect %>
 <% end %>
 
