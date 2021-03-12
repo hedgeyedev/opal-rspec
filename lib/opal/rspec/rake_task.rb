@@ -92,7 +92,7 @@ module Opal
         uri = URI(URL)
         while tries < 4 && !up
           tries += 1
-          sleep 0.1
+          sleep 4
           begin
             # Using TCPSocket, not net/http open because executing the HTTP GET / will incur a decent delay just to check if the server is up
             # in order to better communicate to the user what is going on, save the actual HTTP request for the phantom/node run
